@@ -96,7 +96,7 @@ def check_stream(access_token):
         open_stream()
         save_last_opened_stream(stream)
     else:
-        print("This stream is already opened", flush=True)
+        print("This stream has already been opened", flush=True)
     return access_token
 
 def main():
