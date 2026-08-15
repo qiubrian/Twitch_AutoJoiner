@@ -1,0 +1,14 @@
+config.json
+state.json
+output.log
+error.log
+*.log
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.DS_Store
+.vscode/
+.idea/
