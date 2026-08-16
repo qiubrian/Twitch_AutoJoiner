@@ -100,6 +100,8 @@ def check_stream(access_token):
     return access_token
 
 def main():
+    if STATE_FILE.exists():
+        STATE_FILE.unlink()
     print(f"Watching channel: {STREAMER}", flush=True)
     print(f"Checking every {CHECK_INTERVAL} seconds.", flush=True)
     print(f"Stream URL: {TWITCH_URL}", flush=True)
