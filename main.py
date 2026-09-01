@@ -99,13 +99,13 @@ def checkStream(accessToken):
     return accessToken
 
 def main():
-    if STATE_FILE.exists():
-        STATE_FILE.unlink()
+    if os.path.exists(STATE_FILE):
+        os.remove(STATE_FILE)
     print(f"Watching channel: {STREAMER}", flush=True)
     print(f"Checking every {CHECK_INTERVAL} seconds.", flush=True)
     print(f"Stream URL: {TWITCH_URL}", flush=True)
     print(flush=True)
-    access_token = None
+    accessToken = None
     while True:
         try:
             if accessToken is None:
