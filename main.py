@@ -4,12 +4,31 @@ import time
 import requests
 import os
 import platform
+import argparse
 
 currentOS = platform.system()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 STATE_FILE = os.path.join(BASE_DIR, "state.json")
+
+def checkPosInt(value):
+    num = int(value)
+    if num <= 0:
+        raise argparse.ArgumentTypeError("Error, must be greater than 0")
+    return num
+
+def applyCustomConfig():
+    global STREAMER, CHECK_INTERVAL, TWITCH_URL
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--streamer")
+    parser.add_argument("--interval", type = checkPosInt)
+    args = parser.parse_args()
+    if args.streamer:
+        STREAMER = args.streamer.strip().lower()
+    if args.interval is not None:
+        CHECK_INTERVAL = args.interval
+    TWITCH_URL = f"https://www.twitch.tv/{STREAMER}"
 
 def loadConfig():
     if not os.path.exists(CONFIG_FILE):
@@ -108,6 +127,7 @@ def checkStream(accessToken):
     return accessToken
 
 def main():
+    applyCustomConfig()
     if os.path.exists(STATE_FILE):
         os.remove(STATE_FILE)
     print(f"Watching channel: {STREAMER}", flush=True)
