@@ -3,6 +3,9 @@ import subprocess
 import time
 import requests
 import os
+import platform
+
+currentOS = platform.system()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
@@ -79,7 +82,13 @@ def saveLastOpenedStream(stream):
 
 def openStream():
     print(f"Opening {TWITCH_URL}", flush = True)
-    subprocess.Popen(["/usr/bin/open", TWITCH_URL])
+    if currentOS == "Windows":
+        os.startfile(TWITCH_URL)
+    elif currentOS == "Darwin":
+        subprocess.Popen(["/usr/bin/open", TWITCH_URL])
+    else:
+        print("OS not supported")
+        return
 
 def checkStream(accessToken):
     stream = getStream(accessToken)
