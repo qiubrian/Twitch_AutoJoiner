@@ -5,6 +5,7 @@ import requests
 import os
 import platform
 import argparse
+from datetime import datetime
 
 currentOS = platform.system()
 
@@ -18,16 +19,28 @@ def checkPosInt(value):
         raise argparse.ArgumentTypeError("Error, must be greater than 0")
     return num
 
+def checkDateTime(value):
+    try:
+        dateTime = datetime.fromisoformat(value)
+    except ValueError as e:
+        raise argparse.ArgumentTypeError("Error, last match must use ISO format") from e
+    if dateTime.tzinfo is None:
+        raise argparse.ArgumentTypeError("Error, last match time must include a timezone")
+    return dateTime
+
 def applyCustomConfig():
-    global STREAMER, CHECK_INTERVAL, TWITCH_URL
+    global STREAMER, CHECK_INTERVAL, TWITCH_URL, LAST_MATCH_TIME
     parser = argparse.ArgumentParser()
     parser.add_argument("--streamer")
     parser.add_argument("--interval", type = checkPosInt)
+    parser.add_argument("--last-match-time", type = checkDateTime)
     args = parser.parse_args()
     if args.streamer:
         STREAMER = args.streamer.strip().lower()
     if args.interval is not None:
         CHECK_INTERVAL = args.interval
+    if args.last_match_time is not None:
+        LAST_MATCH_TIME = args.last_match_time
     TWITCH_URL = f"https://www.twitch.tv/{STREAMER}"
 
 def loadConfig():
@@ -57,6 +70,7 @@ CLIENT_SECRET = config["client_secret"]
 STREAMER = config["streamer"].strip().lower()
 CHECK_INTERVAL = config.get("check_interval", 60)
 TWITCH_URL = f"https://www.twitch.tv/{STREAMER}"
+LAST_MATCH_TIME = None
 
 def getToken():
     tokenUrl = "https://id.twitch.tv/oauth2/token"
@@ -113,7 +127,7 @@ def checkStream(accessToken):
     stream = getStream(accessToken)
     if stream is None:
         print(f"{STREAMER} is offline", flush = True)
-        return accessToken
+        return False
     streamID = stream["id"]
     streamTitle = stream.get("title", "")
     print(f"{STREAMER} is live: {streamTitle}", flush = True)
@@ -124,7 +138,7 @@ def checkStream(accessToken):
         saveLastOpenedStream(stream)
     else:
         print("This stream has already been opened", flush = True)
-    return accessToken
+    return True
 
 def main():
     applyCustomConfig()
@@ -141,7 +155,13 @@ def main():
                 print("Getting token", flush = True)
                 accessToken = getToken()
                 print("Twitch authenticated", flush = True)
-            accessToken = checkStream(accessToken)
+            streamIsLive = checkStream(accessToken)
+            if not streamIsLive:
+                if LAST_MATCH_TIME is not None:
+                    currentTime = datetime.now(LAST_MATCH_TIME.tzinfo)
+                    if currentTime >= LAST_MATCH_TIME:
+                        print("Stream has ended and no later matches are scheduled today", flush = True)
+                        break
         except requests.exceptions.HTTPError as error:
             print(f"Twitch API returned HTTP {error.response.status_code}", flush = True)
             if error.response.status_code == 401:
