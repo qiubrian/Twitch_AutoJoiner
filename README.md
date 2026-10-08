@@ -21,3 +21,7 @@ CTRL + C (Keyboard Interrupt)
 
 the program.
 
+# Update 09/28/26:
+
+Adding optional feature for R6DropAutoCollector program that accepts a custom command from the R6DropAutoCollector and ends checking when the last match has concluded
+
