@@ -1,11 +1,12 @@
+import argparse
 import json
-import subprocess
-import time
-import requests
 import os
 import platform
-import argparse
+import subprocess
+import time
 from datetime import datetime
+
+import requests
 
 currentOS = platform.system()
 
