@@ -12,3 +12,4 @@ env/
 .DS_Store
 .vscode/
 .idea/
+run_twitch_autojoiner*.bat

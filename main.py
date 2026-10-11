@@ -150,6 +150,7 @@ def main():
     print(f"Stream URL: {TWITCH_URL}", flush=True)
     print(flush=True)
     accessToken = None
+    hasSeenStream = False
     while True:
         try:
             if accessToken is None:
@@ -157,12 +158,16 @@ def main():
                 accessToken = getToken()
                 print("Twitch authenticated", flush = True)
             streamIsLive = checkStream(accessToken)
-            if not streamIsLive:
-                if LAST_MATCH_TIME is not None:
-                    currentTime = datetime.now(LAST_MATCH_TIME.tzinfo)
-                    if currentTime >= LAST_MATCH_TIME:
-                        print("Stream has ended and no later matches are scheduled today", flush = True)
-                        break
+            if streamIsLive:
+                hasSeenStream = True
+            elif LAST_MATCH_TIME is not None:
+                currentTime = datetime.now(LAST_MATCH_TIME.tzinfo)
+                if currentTime >= LAST_MATCH_TIME:
+                    print("Stream has ended and no later matches are scheduled today", flush = True)
+                    break
+            elif hasSeenStream:
+                print(f"{STREAMER} is offline, ending Twitch Autojoiner", flush = True)
+                break
         except requests.exceptions.HTTPError as error:
             print(f"Twitch API returned HTTP {error.response.status_code}", flush = True)
             if error.response.status_code == 401:
