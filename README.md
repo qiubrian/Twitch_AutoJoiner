@@ -25,3 +25,7 @@ the program.
 
 Adding optional feature for R6DropAutoCollector program that accepts a custom command from the R6DropAutoCollector and ends checking when the last match has concluded
 
+# Update 10/11/26:
+
+Adding automatic offline detection to prevent permanent program execution even though streamer is offline
+
