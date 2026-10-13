@@ -21,6 +21,8 @@ CTRL + C (Keyboard Interrupt)
 
 the program.
 
+You can also launch with a custom config using --streamer and --interval (Example usage: python3 main.py --streamer rainbow6 --interval 60)
+
 # Update 09/28/26:
 
 Adding optional feature for R6DropAutoCollector program that accepts a custom command from the R6DropAutoCollector and ends checking when the last match has concluded
