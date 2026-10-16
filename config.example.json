@@ -1,6 +1,17 @@
 {
-    "client_id": "YOUR_CLIENT_ID",
+    "//1": "This is a comment describing the configuration below. client_id and client_secret are obtained through Twitch dev tools dashboard",
+    "client_id": "YOUR_CLIENT_ID",  
     "client_secret": "YOUR_CLIENT_SECRET",
     "streamer": "STREAMERNAME",
-    "check_interval": 60
+    "check_interval": 60,
+    "//2": {
+        "_comment": "The bridge port is a port on your device to listen for the tampermonkey updates",
+        "_comment2": "The open_tab_interval is the cooldown time between opening a tab and detecting a pause or error to prevent tab spam"
+    },
+    "bridge": {
+        "token": "ENTER_YOUR_TOKEN_HERE", 
+        "port": "ENTER_YOUR_PORT_NUMBER_HERE", 
+        "open_tab_interval": "ENTER_PREFERRED_INTERVAL_HERE", 
+        "max_reopens": "ENTER_PREFERRED_REOPEN_LIMIT_HERE"
+    }
 }
