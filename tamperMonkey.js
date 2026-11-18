@@ -37,8 +37,8 @@
     }
     const BRIDGE = "http://127.0.0.1:" + port + "/status";
     const INTERVAL_MS = 5000;
-    const FAILURE_MS = 45000;
-    const STARTUP_MS = 60000;
+    const FAILURE_MS = 20000;
+    const STARTUP_MS = 20000;
     const streamer = initialChannel[1].toLowerCase();
     let video = null;
     let lastTime = 0;
@@ -135,5 +135,3 @@
     }
     tick();
 })();
-
-// Paste this into tampermonkey
