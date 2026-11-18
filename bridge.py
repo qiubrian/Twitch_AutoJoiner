@@ -15,8 +15,8 @@ class PlaybackBridge:
             raise ValueError("Invalid bridge recovery limits")
         self.streamer = streamer
         self.token = token
-        self.cooldown = cooldown_seconds
-        self.max_reopens = max_reopens
+        self.cooldowns = [30, 60, 120, 300, 600]
+        self.max_reopens = len(self.cooldowns)
         self.lock = threading.Lock()
         self.instance_id = None
         self.stream_id = None
@@ -51,12 +51,14 @@ class PlaybackBridge:
                 return False
             self.state = state
             self.report_at = time.monotonic()
+            if state == "playing":
+                self.reopens = 0
             return True
 
     def recoveryDue(self):
         with self.lock:
             now = time.monotonic()
-            return self.state == "failed" and now - self.report_at <= 30 and now - self.opened_at >= self.cooldown and self.reopens < self.max_reopens
+            return self.state == "failed" and now - self.report_at <= 30 and now - self.opened_at >= self.cooldowns[self.reopens] and self.reopens < self.max_reopens
 
     def getStatus(self):
         with self.lock:
