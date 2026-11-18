@@ -31,3 +31,7 @@ Adding optional feature for R6DropAutoCollector program that accepts a custom co
 
 Adding automatic offline detection to prevent permanent program execution even though streamer is offline
 
+# Update 11/17/26:
+
+Adding retry attempts to reconnect to the stream using checks for stream errors (network drop, twitch pause, etc)
+
