@@ -5,7 +5,7 @@ To run, clone the repo and go to twitch dev tools (https://dev.twitch.tv/login) 
 
 After logging in, go to applications and register a new application. Then, name it and use a localhost URL for the OAuth Redirect URL (ex: http://localhost:3000) (The OAuth Redirect URL isnt needed for this as the program uses client credentials). Select the catagory of "Other" and then select confidential and create. 
 
-Then, click manage on the application. Create a config.json file using the config.example.json file present in the repo and copy and paste the client ID and secret (Generate a new secret if one doesnt appear) into the proper fields. Dont commit or share these credentials. 
+Then, click manage on the application. Create a config.json file using the config.example.json file present in the repo and copy and paste the client ID and secret (Generate a new secret if one doesnt appear) into the proper fields. Dont share these credentials. 
 
 Then run the program by using 
 
